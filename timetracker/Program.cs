@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace timetracker
 {
@@ -14,43 +13,19 @@ namespace timetracker
                 Console.WriteLine("Scanning for processes...");
                 foreach (var processToMonitor in processesToMonitor)
                 {
-                    ReturnTotalUserProcessorTime(processToMonitor);
+                    var processes = Process.GetProcessesByName(processToMonitor);
+                    var processWrapper = new ProcessWrapper(processes);
+                    if (processWrapper.Process == null)
+                    {
+                        continue;
+                    }
+                    Console.WriteLine($"Process {processToMonitor} is now active. Recording...");
+                    var processManager = new ProcessManager(processWrapper);
+                    var activeTime = processManager.ComputeActiveTime();
+                    var processSession = new ProcessSession(processManager);
+                    processSession.SaveActiveTime(processToMonitor);
                 }
                 System.Threading.Thread.Sleep(5000);
-            }
-        }
-
-        [DllImport("user32.dll")]
-        static extern IntPtr GetForegroundWindow();
-
-        public static IntPtr GetForegroundWindowWrapper()
-        {
-            return GetForegroundWindow();
-        }
-
-        public static void ReturnTotalUserProcessorTime(string processName)
-        {
-            var processes = System.Diagnostics.Process.GetProcessesByName(processName);
-            if (processes.Length > 1)
-            {
-                throw new InvalidOperationException($"Multiple processes with name {processName} detected.");
-            }
-            else
-            {
-                var process = processes[0];
-                var totalUseTime = TimeSpan.FromSeconds(0);
-                do
-                {
-                    var beforeActiveTime = DateTime.Now;
-                    var activeTime = TimeSpan.FromSeconds(0);
-                    while (process.MainWindowHandle.Equals(GetForegroundWindowWrapper()))
-                    {
-                        activeTime = DateTime.Now - beforeActiveTime;
-                        Console.WriteLine("a: " + activeTime);
-                    }
-                    totalUseTime += activeTime;
-                    Console.WriteLine("t: "+ totalUseTime);
-                } while (!process.HasExited);
             }
         }
     }
