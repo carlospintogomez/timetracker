@@ -8,6 +8,7 @@ namespace timetracker
         static void Main(string[] args)
         {
             string[] processesToMonitor = new string[] { "MTGA" };
+            var sessionLog = new SessionLog();
             while (true)
             {
                 Console.WriteLine("Scanning for processes...");
@@ -21,9 +22,11 @@ namespace timetracker
                     }
                     Console.WriteLine($"Process {processToMonitor} is now active. Recording...");
                     var processManager = new ProcessManager(processWrapper);
-                    var activeTime = processManager.ComputeActiveTime();
-                    var processSession = new ProcessSession(processManager);
-                    processSession.SaveActiveTime(processToMonitor);
+                    var processSession = new ProcessSession(processManager.GetProcess().GetProcessName());
+                    var processActiveTime = processManager.ComputeActiveTime();
+                    processSession.SaveActiveTime(processActiveTime);
+                    var sessionManager = new SessionManager(processSession);
+                    sessionLog.PersistSession(sessionManager);
                 }
                 System.Threading.Thread.Sleep(5000);
             }

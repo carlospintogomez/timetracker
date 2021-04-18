@@ -1,32 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace timetracker
 {
+    /// <summary>
+    /// Process Session object saves all activity occuring for a given time/transaction.
+    /// </summary>
     public class ProcessSession : IProcessSession
     {
-        private IProcessManager _processManager;
+        private TimeSpan _activeTime;
+        private readonly string _sessionName;
 
-        public Dictionary<string, TimeSpan> TimeLogDictionary { get; }
-
-        public ProcessSession(IProcessManager processManager)
+        public ProcessSession(string sessionName)
         {
-            _processManager = processManager;
-            TimeLogDictionary = new Dictionary<string, TimeSpan>();
+            _sessionName = sessionName;
         }
 
-        public void SaveActiveTime(string processName)
+        public string GetSessionName()
         {
-            var processActiveTime = _processManager.ComputeActiveTime();
-            if (TimeLogDictionary.ContainsKey(processName))
-            {
-                TimeLogDictionary[processName] += processActiveTime;
-            }
-            else
-            {
-                TimeLogDictionary.Add(processName, processActiveTime);
-            }
-            Console.WriteLine("Process Total Active Time: " + TimeLogDictionary[processName]);
+            return _sessionName;
+        }
+
+        public TimeSpan GetActiveTime()
+        {
+            return _activeTime;
+        }
+
+        public void SaveActiveTime(TimeSpan activeTime)
+        {
+            _activeTime += activeTime;
+            Console.WriteLine("Process Total Active Time: " + _activeTime);
         }
     }
 }

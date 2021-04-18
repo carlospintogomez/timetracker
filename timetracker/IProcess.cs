@@ -4,5 +4,6 @@
     {
         public bool HasExited();
         public bool IsActive();
+        public string GetProcessName();
     }
 }

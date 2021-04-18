@@ -15,7 +15,7 @@ namespace timetracker.tests
             processMock = new Mock<IProcess>(MockBehavior.Strict);
         }
 
-        //TODO: potential flaky test since it's not deterministic
+        //TODO: flaky test since it's not deterministic
         [TestMethod]
         public void ComputeActiveTime_ValidProcess_IncreasesActiveTime()
         {
@@ -24,18 +24,20 @@ namespace timetracker.tests
             processMock.Setup(m => m.IsActive()).Returns(true);
             processMock.Setup(m => m.HasExited()).Returns(false);
             var processManager = new ProcessManager(processMock.Object);
+            var result = TimeSpan.Zero;
+
+            // Act
             var task = System.Threading.Tasks.Task.Run(() =>
             {
                 // TODO: this prevents flakiness since CPU is faster than 1s. Not optimal.
-                System.Threading.Thread.Sleep(time);
-                processMock.Setup(m => m.IsActive()).Returns(false);
-                processMock.Setup(m => m.HasExited()).Returns(true);
+                result = processManager.ComputeActiveTime();
             });
-
-            // Act
-            var result = processManager.ComputeActiveTime();
+            System.Threading.Thread.Sleep(time);
+            processMock.Setup(m => m.IsActive()).Returns(false);
+            processMock.Setup(m => m.HasExited()).Returns(true);
 
             // Assert
+            task.Wait();
             Assert.IsTrue(result.Ticks > TimeSpan.FromMilliseconds(time).Ticks);
         }
     }

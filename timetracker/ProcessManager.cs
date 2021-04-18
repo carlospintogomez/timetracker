@@ -4,22 +4,28 @@ namespace timetracker
 {
     public class ProcessManager : IProcessManager
     {
-        public IProcess Process { get; }
+        private readonly IProcess _process;
 
         public ProcessManager(IProcess process)
         {
-            Process = process;
+            _process = process;
+        }
+
+        public IProcess GetProcess()
+        {
+            return _process;
         }
 
         public TimeSpan ComputeActiveTime()
         {
             var totalUseTime = TimeSpan.FromSeconds(0);
-            while (!Process.HasExited())
+            //TODO: convert HasExited to Event based (Async)
+            while (!_process.HasExited())
             {
                 var beforeActiveTime = DateTime.Now;
                 var activeTime = TimeSpan.FromSeconds(0);
                 //TODO: convert IsActive to Event based (Async)
-                while (Process.IsActive())
+                while (_process.IsActive())
                 {
                     activeTime = DateTime.Now - beforeActiveTime;
                     if (activeTime.Seconds != 0 && activeTime.Seconds % 5 == 0)
@@ -29,7 +35,6 @@ namespace timetracker
                 }
                 totalUseTime += activeTime;
                 Console.WriteLine($"Total playing time is {totalUseTime.Seconds} seconds");
-                //TODO: convert HasExited to Event based (Async)
             }
             return totalUseTime;
         }

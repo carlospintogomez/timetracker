@@ -23,8 +23,10 @@ namespace timetracker
             return Process.MainWindowHandle.Equals(GetForegroundWindow());
         }
 
-        [DllImport("user32.dll")]
-        static extern IntPtr GetForegroundWindow();
+        public string GetProcessName()
+        {
+            return Process.ProcessName;
+        }
 
         public bool HasExited()
         {
@@ -46,5 +48,8 @@ namespace timetracker
                 return processes[0];
             }
         }
+
+        [DllImport("user32.dll")]
+        static extern IntPtr GetForegroundWindow();
     }
 }
