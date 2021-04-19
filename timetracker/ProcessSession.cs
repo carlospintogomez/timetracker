@@ -7,28 +7,30 @@ namespace timetracker
     /// </summary>
     public class ProcessSession : IProcessSession
     {
-        private TimeSpan _activeTime;
-        private readonly string _sessionName;
+        public TimeSpan ActiveTime { get; set; }
+        public string SessionName { get; set; }
+        public DateTime EndTime { get; set; }
 
         public ProcessSession(string sessionName)
         {
-            _sessionName = sessionName;
+            SessionName = sessionName;
         }
 
         public string GetSessionName()
         {
-            return _sessionName;
+            return SessionName;
         }
 
         public TimeSpan GetActiveTime()
         {
-            return _activeTime;
+            return ActiveTime;
         }
 
-        public void SaveActiveTime(TimeSpan activeTime)
+        public void AddActiveTime(TimeSpan activeTime)
         {
-            _activeTime += activeTime;
-            Console.WriteLine("Process Total Active Time: " + _activeTime);
+            ActiveTime = GetActiveTime() + activeTime;
+            EndTime = DateTime.Now;
+            Console.WriteLine("Process Total Active Time: " + ActiveTime);
         }
     }
 }

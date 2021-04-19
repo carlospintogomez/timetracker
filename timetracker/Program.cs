@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace timetracker
 {
@@ -24,9 +26,10 @@ namespace timetracker
                     var processManager = new ProcessManager(processWrapper);
                     var processSession = new ProcessSession(processManager.GetProcess().GetProcessName());
                     var processActiveTime = processManager.ComputeActiveTime();
-                    processSession.SaveActiveTime(processActiveTime);
-                    var sessionManager = new SessionManager(processSession);
-                    sessionLog.PersistSession(sessionManager);
+                    processSession.AddActiveTime(processActiveTime);
+                    sessionLog.Sessions.Add(processSession);
+                    var json = JsonConvert.SerializeObject(sessionLog);
+                    File.WriteAllText("session_log.json", json);
                 }
                 System.Threading.Thread.Sleep(5000);
             }
