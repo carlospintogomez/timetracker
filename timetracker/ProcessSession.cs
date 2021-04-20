@@ -11,11 +11,6 @@ namespace timetracker
         public string SessionName { get; set; }
         public DateTime EndTime { get; set; }
 
-        public ProcessSession(string sessionName)
-        {
-            SessionName = sessionName;
-        }
-
         public string GetSessionName()
         {
             return SessionName;
@@ -24,13 +19,6 @@ namespace timetracker
         public TimeSpan GetActiveTime()
         {
             return ActiveTime;
-        }
-
-        public void AddActiveTime(TimeSpan activeTime)
-        {
-            ActiveTime = GetActiveTime() + activeTime;
-            EndTime = DateTime.Now;
-            Console.WriteLine("Process Total Active Time: " + ActiveTime);
         }
     }
 }

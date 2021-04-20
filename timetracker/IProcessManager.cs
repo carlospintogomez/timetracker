@@ -4,7 +4,7 @@ namespace timetracker
 {
     public interface IProcessManager
     {
-        public TimeSpan ComputeActiveTime();
+        public TimeSpan PollActiveTime();
         public IProcess GetProcess();
     }
 }

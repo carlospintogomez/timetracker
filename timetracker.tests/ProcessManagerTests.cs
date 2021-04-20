@@ -30,7 +30,7 @@ namespace timetracker.tests
             var task = System.Threading.Tasks.Task.Run(() =>
             {
                 // TODO: this prevents flakiness since CPU is faster than 1s. Not optimal.
-                result = processManager.ComputeActiveTime();
+                result = processManager.PollActiveTime();
             });
             System.Threading.Thread.Sleep(time);
             processMock.Setup(m => m.IsActive()).Returns(false);

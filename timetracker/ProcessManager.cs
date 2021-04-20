@@ -16,7 +16,7 @@ namespace timetracker
             return _process;
         }
 
-        public TimeSpan ComputeActiveTime()
+        public TimeSpan PollActiveTime()
         {
             var totalUseTime = TimeSpan.FromSeconds(0);
             //TODO: convert HasExited to Event based (Async)
