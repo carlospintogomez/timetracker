@@ -6,31 +6,26 @@ namespace timetracker
 {
     public class ProcessWrapper : IProcess
     {
-        public Process Process { get; }
-
-        public ProcessWrapper(Process process)
-        {
-            Process = process;
-        }
-
+        private Process _process;
+        
         public ProcessWrapper(Process[] processes)
         {
-            Process = RetrieveSingleProcessByName(processes);
+            _process = RetrieveSingleProcessByName(processes);
         }
 
         public bool IsActive()
         {
-            return Process.MainWindowHandle.Equals(GetForegroundWindow());
-        }
-
-        public string GetProcessName()
-        {
-            return Process.ProcessName;
+            return _process.MainWindowHandle.Equals(GetForegroundWindow());
         }
 
         public bool HasExited()
         {
-            return Process.HasExited;
+            return _process.HasExited;
+        }
+
+        public string GetProcessName()
+        {
+            return _process.ProcessName;
         }
 
         private Process RetrieveSingleProcessByName(Process[] processes)

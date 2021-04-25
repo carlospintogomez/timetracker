@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "timetracker", "timetracker\timetracker.csproj", "{06724BA4-5CCA-4ECE-BA4E-CFA597FD2A60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "timetracker.tests", "timetracker.tests\timetracker.tests.csproj", "{0C178849-209E-4A46-B2E2-0F3892D35721}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "timetracker.tests", "timetracker.tests\timetracker.tests.csproj", "{0C178849-209E-4A46-B2E2-0F3892D35721}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

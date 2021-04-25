@@ -5,6 +5,6 @@ namespace timetracker
     public interface IProcessSession
     {
         public string GetSessionName();
-        public TimeSpan GetActiveTime();
+        public TimeSpan GetTotalActiveTime();
     }
 }
