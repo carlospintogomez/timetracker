@@ -18,7 +18,6 @@ namespace timetracker
         {
             while (true)
             {
-                Console.WriteLine("Scanning for processes...");
                 foreach (var processToWatch in _processesToScan)
                 {
                     var processes = Process.GetProcessesByName(processToWatch);

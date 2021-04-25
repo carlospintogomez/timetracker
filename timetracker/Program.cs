@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using Newtonsoft.Json;
+﻿using System.Collections.Generic;
 
 namespace timetracker
 {

@@ -6,5 +6,6 @@ namespace timetracker
     {
         public TimeSpan ActiveTime { get; set; }
         public bool ActiveThresholdReached { get; set; }
+        public ProcessSession ProcessSession { get; set; }
     }
 }

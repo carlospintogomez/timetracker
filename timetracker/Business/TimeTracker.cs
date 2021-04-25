@@ -2,14 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace timetracker
 {
     public class TimeTracker
     {
-        SessionLog _sessionLog = new SessionLog();
+        private SessionLog _sessionLog = new SessionLog();
         private HashSet<string> _scannedProcesses = new HashSet<string>();
+        private HashSet<string> _alertedProcesses = new HashSet<string>();
 
         public void StartTimeTracker(List<string> processesToWatch)
         {
@@ -35,7 +35,7 @@ namespace timetracker
                 ActiveTimeLimit = TimeSpan.FromSeconds(5)
             };
             processSession.SessiongEnded += SessionEnded;
-            processSession.ActiveThresholdReached += ActiveThresholdTimeReacher;
+            processSession.ActiveThresholdReached += ActiveThresholdTimeReached;
             processSession.StartSession();
             _scannedProcesses.Add(e.ProcessWrapper.GetProcessName());
         }
@@ -43,6 +43,7 @@ namespace timetracker
         private void SessionEnded(object sender, SessionEndedEventArgs e)
         {
             _scannedProcesses.Remove(e.ProcessSession.ProcessWatcher.ProcessWrapper.GetProcessName());
+            _alertedProcesses.Remove(e.ProcessSession.ProcessWatcher.ProcessWrapper.GetProcessName());
             _sessionLog.SquashSession(DateTime.Today.ToShortDateString(), e.ProcessSession);
             // Persisting
             var json = JsonConvert.SerializeObject(_sessionLog);
@@ -50,8 +51,9 @@ namespace timetracker
             File.WriteAllText("session_log.json", json);
         }
 
-        private void ActiveThresholdTimeReacher(object sender, ActiveThresholdReachedEventArgs e)
+        private void ActiveThresholdTimeReached(object sender, ActiveThresholdReachedEventArgs e)
         {
+            _alertedProcesses.Add(e.ProcessSession.ProcessWatcher.ProcessWrapper.GetProcessName());
             Console.WriteLine($"You've been playing for {e.ActiveTime}");
         }
     }

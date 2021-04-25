@@ -46,7 +46,8 @@ namespace timetracker
                 var activeThresholdReacherEventArgs = new ActiveThresholdReachedEventArgs
                 {
                     ActiveThresholdReached = true,
-                    ActiveTime = e.ActiveTime
+                    ActiveTime = e.ActiveTime,
+                    ProcessSession = this
                 };
                 OnActiveThresholdReached(activeThresholdReacherEventArgs);
             }
