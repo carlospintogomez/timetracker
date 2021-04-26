@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace timetracker
 {
@@ -7,9 +8,12 @@ namespace timetracker
         
         static void Main(string[] args)
         {
-            List<string> processesToWatch = new List<string> { "MTGA" };
-            var timeTracker = new TimeTracker();
-            timeTracker.StartTimeTracker(processesToWatch);
+            var processTimeLimits = new Dictionary<string, TimeSpan>
+            {
+                { "MTGA", TimeSpan.FromSeconds(10) }
+            };
+            var timeTracker = new TimeTracker(processTimeLimits);
+            timeTracker.StartTimeTracker(new List<string>(processTimeLimits.Keys));
         }
     }
 }

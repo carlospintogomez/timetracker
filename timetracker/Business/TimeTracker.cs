@@ -7,9 +7,15 @@ namespace timetracker
 {
     public class TimeTracker
     {
+        private Dictionary<string, TimeSpan> _processTimeLimits = new Dictionary<string, TimeSpan>();
         private SessionLog _sessionLog = new SessionLog();
         private HashSet<string> _scannedProcesses = new HashSet<string>();
         private HashSet<string> _alertedProcesses = new HashSet<string>();
+
+        public TimeTracker(Dictionary<string, TimeSpan> ProcessTimeLimits)
+        {
+            _processTimeLimits = ProcessTimeLimits;
+        }
 
         public void StartTimeTracker(List<string> processesToWatch)
         {
@@ -32,7 +38,7 @@ namespace timetracker
             var processSession = new ProcessSession(processWatcher)
             {
                 SessionName = processWatcher.ProcessWrapper.GetProcessName(),
-                ActiveTimeLimit = TimeSpan.FromSeconds(5)
+                ActiveTimeLimit = _processTimeLimits.GetValueOrDefault(e.ProcessWrapper.GetProcessName())
             };
             processSession.SessiongEnded += SessionEnded;
             processSession.ActiveThresholdReached += ActiveThresholdTimeReached;
