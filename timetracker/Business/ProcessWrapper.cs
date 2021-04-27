@@ -4,6 +4,9 @@ using System.Runtime.InteropServices;
 
 namespace timetracker
 {
+    /// <summary>
+    /// Means by which a transaction is made.
+    /// </summary>
     public class ProcessWrapper : IProcess
     {
         private Process _process;

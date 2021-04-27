@@ -7,7 +7,8 @@ namespace timetracker
     /// </summary>
     public class SessionLogEntry
     {
-        public event EventHandler<ActiveThresholdReachedEventArgs> ActiveThresholdReached;
+        // TODO: there's some similarity between this class and ProcessSession. Interface? Abstract?
+        public string Category { get; set; }
         public TimeSpan TotalActiveTime { get; set; }
         public string SessionName { get; set; }
     }

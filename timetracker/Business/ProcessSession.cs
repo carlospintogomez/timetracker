@@ -7,19 +7,21 @@ namespace timetracker
     /// </summary>
     public class ProcessSession : IProcessSession
     {
+        //TODO: maybe use a SessionLog object to contain many of these fields?
         public event EventHandler<ActiveThresholdReachedEventArgs> ActiveThresholdReached;
         public TimeSpan ActiveTimeLimit { get; set; }
         public TimeSpan TotalActiveTime { get; set; }
         public string SessionName { get; set; }
         public event EventHandler<SessionEndedEventArgs> SessiongEnded;
         public ProcessWatcher ProcessWatcher { get; }
-        private DateTime _endTime;
+        public string Category { get; set; }
 
         public ProcessSession(ProcessWatcher processWatcher)
         {
             ProcessWatcher = processWatcher;
         }
 
+        // TODO: move all methods into a ProcessSessionManager class
         public void StartSession()
         {
             ProcessWatcher.Exited += Exited;
@@ -30,7 +32,6 @@ namespace timetracker
         private void Exited(object source, ExitedEventArgs e)
         {
             TotalActiveTime = e.TotalActiveTime;
-            _endTime = DateTime.Now;
             Console.WriteLine("Process Total Active Time: " + TotalActiveTime);
             var sessionEndedEventArgs = new SessionEndedEventArgs
             {
@@ -61,11 +62,6 @@ namespace timetracker
         public TimeSpan GetTotalActiveTime()
         {
             return TotalActiveTime;
-        }
-
-        public DateTime GetEndTime()
-        {
-            return _endTime;
         }
 
         public void OnSessionEnded(SessionEndedEventArgs e)
