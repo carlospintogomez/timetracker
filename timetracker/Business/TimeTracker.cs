@@ -40,7 +40,7 @@ namespace timetracker
             var processSession = new ProcessSession(processWatcher)
             {
                 SessionName = processWatcher.ProcessWrapper.GetProcessName(),
-                ActiveTimeLimit = _categoryTimeLimits.GetValueOrDefault(_processCategories.GetValueOrDefault(e.ProcessWrapper.GetProcessName())),
+                CategoryLimits = _categoryTimeLimits,
                 Category = _processCategories.GetValueOrDefault(e.ProcessWrapper.GetProcessName())
             };
             processSession.SessiongEnded += SessionEnded;

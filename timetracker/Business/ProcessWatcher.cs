@@ -6,6 +6,7 @@ namespace timetracker
     {
         public event EventHandler<ExitedEventArgs> Exited;
         public event EventHandler<IsActiveEventArgs> IsActive;
+        public event EventHandler<IsInactiveEventArgs> IsInactive;
         public TimeSpan ActiveTimeSensitivity { get; set; }
         public ProcessWrapper ProcessWrapper { get; }
 
@@ -36,6 +37,15 @@ namespace timetracker
                         System.Threading.Thread.Sleep(ActiveTimeSensitivity.Milliseconds);
                     }
                     totalActiveTime += activeTime;
+                    if(activeTime != TimeSpan.FromSeconds(0))
+                    {
+                        var isInactiveEventArgs = new IsInactiveEventArgs
+                        {
+                            IsInactive = true,
+                            TotalActiveTime = totalActiveTime
+                        };
+                        OnIsInactive(isInactiveEventArgs);
+                    }
                 }
                 var exitedEventArgs = new ExitedEventArgs
                 {
@@ -49,6 +59,11 @@ namespace timetracker
         public void OnIsActive(IsActiveEventArgs e)
         {
             IsActive?.Invoke(this, e);
+        }
+
+        public void OnIsInactive(IsInactiveEventArgs e)
+        {
+            IsInactive?.Invoke(this, e);
         }
 
         public void OnExited(ExitedEventArgs e)

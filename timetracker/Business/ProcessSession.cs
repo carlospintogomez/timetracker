@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace timetracker
 {
@@ -11,6 +12,7 @@ namespace timetracker
         public event EventHandler<ActiveThresholdReachedEventArgs> ActiveThresholdReached;
         public TimeSpan ActiveTimeLimit { get; set; }
         public TimeSpan TotalActiveTime { get; set; }
+        public Dictionary<string, TimeSpan> CategoryLimits { get;  set; }
         public string SessionName { get; set; }
         public event EventHandler<SessionEndedEventArgs> SessiongEnded;
         public ProcessWatcher ProcessWatcher { get; }
@@ -26,6 +28,7 @@ namespace timetracker
         {
             ProcessWatcher.Exited += Exited;
             ProcessWatcher.IsActive += IsActive;
+            ProcessWatcher.IsInactive += IsInactive;
             ProcessWatcher.PollActive();
         }
 
@@ -42,7 +45,7 @@ namespace timetracker
 
         private void IsActive(object source, IsActiveEventArgs e)
         {
-            if (e.ActiveTime > ActiveTimeLimit)
+            if (e.ActiveTime > CategoryLimits[Category])
             {
                 var activeThresholdReacherEventArgs = new ActiveThresholdReachedEventArgs
                 {
@@ -52,6 +55,12 @@ namespace timetracker
                 };
                 OnActiveThresholdReached(activeThresholdReacherEventArgs);
             }
+        }
+
+        private void IsInactive(object source, IsInactiveEventArgs e)
+        {
+            CategoryLimits[Category] -= e.TotalActiveTime;
+            Console.WriteLine("CategoryLimit: " + CategoryLimits[Category]);
         }
 
         public string GetSessionName()
