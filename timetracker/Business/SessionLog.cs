@@ -23,10 +23,6 @@ namespace timetracker
                     Category = processSession.Category
                 };
             } 
-            else if (!Entries[key].SessionName.Equals(processSession.GetSessionName()))
-            {
-                throw new InvalidOperationException("Cannot add two sessions have different process names");
-            }
             else
             {
                 Entries[key] = new SessionLogEntry

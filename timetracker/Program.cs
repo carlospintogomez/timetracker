@@ -10,11 +10,12 @@ namespace timetracker
         {
             var processTimeLimits = new Dictionary<string, TimeSpan>
             {
-                { "Game", TimeSpan.FromSeconds(10) }
+                { "Game", TimeSpan.FromMinutes(30) }
             };
             var processCategories = new Dictionary<string, string>
             {
-                { "MTGA", "Game" }
+                { "MTGA", "Game" },
+                { "Solitaire", "Game" }
             };
             var timeTracker = new TimeTracker(processTimeLimits, processCategories);
             timeTracker.StartTimeTracker(new List<string>(processCategories.Keys));
