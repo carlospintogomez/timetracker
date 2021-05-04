@@ -25,11 +25,14 @@ namespace timetracker
                     {
                         continue;
                     }
-                    var ProcessFoundEventArgs = new ProcessFoundEventArgs
+                    foreach (var process in processes)
                     {
-                        ProcessWrapper = new ProcessWrapper(processes)
-                    };
-                    OnProcessFound(ProcessFoundEventArgs);
+                        var ProcessFoundEventArgs = new ProcessFoundEventArgs
+                        {
+                            ProcessWrapper = new ProcessWrapper(process)
+                        };
+                        OnProcessFound(ProcessFoundEventArgs);
+                    }
                     System.Threading.Thread.Sleep(5000);
                 }
                 System.Threading.Thread.Sleep(5000);

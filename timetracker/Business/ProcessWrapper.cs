@@ -11,9 +11,9 @@ namespace timetracker
     {
         private Process _process;
         
-        public ProcessWrapper(Process[] processes)
+        public ProcessWrapper(Process process)
         {
-            _process = RetrieveSingleProcessByName(processes);
+            _process = process;
         }
 
         public bool IsActive()
@@ -29,22 +29,6 @@ namespace timetracker
         public string GetProcessName()
         {
             return _process.ProcessName;
-        }
-
-        private Process RetrieveSingleProcessByName(Process[] processes)
-        {
-            if (processes.Length < 1)
-            {
-                return null;
-            }
-            else if (processes.Length > 1)
-            {
-                throw new InvalidOperationException($"Multiple processes detected.");
-            }
-            else
-            {
-                return processes[0];
-            }
         }
 
         [DllImport("user32.dll")]
